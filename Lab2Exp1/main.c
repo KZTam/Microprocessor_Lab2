@@ -7,7 +7,7 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
-#define F_CPU 1000000
+#define F_CPU 10000000
 
 //if want 800ms delay, just call this function 4 times
 void Delay200msUsingTimer0(void){
@@ -141,10 +141,10 @@ void seven_seg(char character){
 		display = 0b10100100;	//Z
 		break;
 	case '3':
-		display = 0b00110000;
+		display = 0b10110000;
 		break;
 	case '4':
-		display = 0b11011001;	//4
+		display = 0b10011001;	//4
 		break;
 	case '5':
 		display = 0b10010010;	//S
@@ -162,7 +162,7 @@ void seven_seg(char character){
 		display = 0b10010000;	//9
 		break;	
 	default:
-		display = 0b00111111;	//-
+		display = 0b10111111;	//-
 		break;	
 	}
 	
@@ -196,6 +196,58 @@ void SKEE3732_304(){	//Year 3 alr still using blocking delay haiyaaaaaa
 	Timer0Delay(8);
 }
 
+void Custom(){	//Year 3 alr still using blocking delay haiyaaaaaa
+	seven_seg('I');
+	Timer0Delay(8);
+	seven_seg('-');
+	Timer0Delay(8);
+	seven_seg('L');
+	Timer0Delay(8);
+	seven_seg('O');
+	Timer0Delay(8);
+	seven_seg('V');
+	Timer0Delay(8);
+	seven_seg('E');
+	Timer0Delay(8);
+	seven_seg('-');
+	Timer0Delay(8);
+
+	seven_seg('C');
+	Timer0Delay(8);
+	seven_seg('H');
+	Timer0Delay(8);
+	seven_seg('E');
+	Timer0Delay(8);
+	seven_seg('W');
+	Timer0Delay(8);
+		
+	seven_seg('J');
+	Timer0Delay(8);
+	seven_seg('I');
+	Timer0Delay(8);
+	seven_seg('N');
+	Timer0Delay(8);	
+	seven_seg('G');
+	Timer0Delay(8);
+	
+	seven_seg('W');
+	Timer0Delay(8);
+	seven_seg('E');
+	Timer0Delay(8);
+	seven_seg('N');
+	Timer0Delay(8);
+/*	
+	seven_seg('K');
+	Timer0Delay(8);
+	seven_seg('E');
+	Timer0Delay(8);
+	seven_seg('K');
+	Timer0Delay(8);
+	seven_seg('E');
+	Timer0Delay(8);
+*/	
+} 
+
 void SW2_code(){	//active low LED
 	PORTA = 0b00110011;
 	Timer0Delay(4);
@@ -220,6 +272,17 @@ void SW3_code(){
 	Timer0Delay(4);
 }
 
+void SubExperiment5(){
+	if(PIND == 0b11111011){
+		SW2_code();
+	}else if(PIND == 0b11110111){
+		SW3_code();
+	}else{
+		SKEE3732_304();
+		//Custom();
+	}
+}
+
 int main(void)
 {
     /* Replace with your application code */
@@ -227,9 +290,14 @@ int main(void)
 	DDRB = 0xFF;
 	DDRD = 0;
 	PORTD = 0xFF;
+	PORTA = 0xFF;
+	PORTB = 0xFF;
+	
+	while(PIND == 0b11111111);	//before start, press any button
 	
     while (1) 
     {
+		/*
 		if(PIND == 0b11111110){
 			PORTA = 0xFE;
 			_delay_ms(1000);
@@ -253,6 +321,8 @@ int main(void)
 			PORTB = 0xFF;
 			_delay_ms(1000);			
 		}
+		*/
+		SubExperiment5();
     }
 }
 
